@@ -131,8 +131,6 @@ npm run dev
 | Service | URL | Default Credentials |
 | :--- | :--- | :--- |
 | **Storefront** | [http://localhost:5173/](http://localhost:5173/) | Public access |
-| **Admin Portal** | [http://localhost:5173/admin](http://localhost:5173/admin) | **Username:** `Admin@122`<br>**Password:** `Bucchi@1225` |
-| **Customer Sign In** | [http://localhost:5173/account](http://localhost:5173/account) | Click **"⚡ 1-Click Demo Login"**<br>*(or `adrian.vance@atelier-2l.com` / `password123`)* |
 | **Backend REST API** | [http://localhost:5000/api](http://localhost:5000/api) | Public & Authenticated Endpoints |
 
 ---
