@@ -201,8 +201,3 @@ To build the frontend for production:
 cd Frontend
 npm run build
 ```
-
----
-
-## 📄 License
-This project is for demonstration and portfolio use. All rights reserved by **2L Atelier**.
