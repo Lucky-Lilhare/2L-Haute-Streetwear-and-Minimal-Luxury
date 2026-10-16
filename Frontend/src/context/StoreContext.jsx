@@ -3,6 +3,12 @@ import { PRODUCTS, INITIAL_USER, GUEST_USER, CURRENCIES } from '../data/products
 
 const StoreContext = createContext();
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.VITE_BACKEND_URL
+    ? `${import.meta.env.VITE_BACKEND_URL}/api`
+    : 'http://localhost:5000/api');
+
 export const useStore = () => {
   const context = useContext(StoreContext);
   if (!context) {
@@ -682,7 +688,7 @@ export const StoreProvider = ({ children }) => {
 
     // 3. Try Backend REST API endpoint /api/auth/login
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: cleanEmail, password })
@@ -753,7 +759,7 @@ export const StoreProvider = ({ children }) => {
 
       // Attempt dispatch to backend API
       try {
-        fetch('http://localhost:5000/api/auth/register', {
+        fetch(`${API_BASE_URL}/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name: cleanName, email: cleanEmail, password, phone })
@@ -972,7 +978,7 @@ export const StoreProvider = ({ children }) => {
 
       // Dispatch to Backend API endpoint
       try {
-        fetch('http://localhost:5000/api/products/bulk', {
+        fetch(`${API_BASE_URL}/products/bulk`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
