@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 
 // Database connection
-import connectDB from './config/db.js';
+import connectDB, { getDbStatus } from './config/db.js';
 
 // Route imports
 import authRoutes from './routes/authRoutes.js';
@@ -82,23 +82,15 @@ app.get('/api', (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
-  const dbStateMap = {
-    0: 'disconnected',
-    1: 'connected',
-    2: 'connecting',
-    3: 'disconnecting',
-  };
-  const readyState = mongoose.connection.readyState;
-  const isConnected = readyState === 1;
+  if (mongoose.connection.readyState === 0 && (process.env.MONGO_URI || process.env.MONGO_URL)) {
+    connectDB().catch(() => {});
+  }
+
+  const dbInfo = getDbStatus();
 
   res.status(200).json({
     status: 'healthy',
-    database: {
-      status: dbStateMap[readyState] || 'unknown',
-      connected: isConnected,
-      host: mongoose.connection.host || null,
-      name: mongoose.connection.name || null,
-    },
+    database: dbInfo,
     uptime: `${Math.floor(process.uptime())}s`,
     timestamp: new Date().toISOString(),
   });
