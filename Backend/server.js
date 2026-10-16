@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 
 // Database connection
 import connectDB from './config/db.js';
@@ -81,9 +82,24 @@ app.get('/api', (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
+  const dbStateMap = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting',
+  };
+  const readyState = mongoose.connection.readyState;
+  const isConnected = readyState === 1;
+
   res.status(200).json({
     status: 'healthy',
-    uptime: process.uptime(),
+    database: {
+      status: dbStateMap[readyState] || 'unknown',
+      connected: isConnected,
+      host: mongoose.connection.host || null,
+      name: mongoose.connection.name || null,
+    },
+    uptime: `${Math.floor(process.uptime())}s`,
     timestamp: new Date().toISOString(),
   });
 });
